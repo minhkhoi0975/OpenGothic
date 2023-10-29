@@ -71,6 +71,8 @@ Resources::Resources(Tempest::Device &device)
   dxMusic->addPath(Gothic::nestedPath({u"_work",u"Data",u"Music",u"dungeon"},  Dir::FT_Dir));
   dxMusic->addPath(Gothic::nestedPath({u"_work",u"Data",u"Music",u"menu_men"}, Dir::FT_Dir));
   dxMusic->addPath(Gothic::nestedPath({u"_work",u"Data",u"Music",u"orchestra"},Dir::FT_Dir));
+  // switch-build
+  dxMusic->addPath(Gothic::nestedPath({u"_work",u"Data",u"Music"},Dir::FT_Dir));
 
   fBuff .reserve(8*1024*1024);
   ddsBuf.reserve(8*1024*1024);
@@ -198,7 +200,7 @@ const Sampler& Resources::shadowSampler() {
   }
 
 void Resources::detectVdf(std::vector<Archive>& ret, const std::u16string &root) {
-  Dir::scan(root,[this,&root,&ret](const std::u16string& vdf,Dir::FileType t){
+  Dir::scan(root,[this,&root,&ret](const std::u16string& vdf, Dir::FileType t){
     if(t==Dir::FT_File) {
       auto file = root + vdf;
       Archive ar;
@@ -211,6 +213,10 @@ void Resources::detectVdf(std::vector<Archive>& ret, const std::u16string &root)
         ret.emplace_back(std::move(ar));
       return;
       }
+
+    // switch uses NX extension for language dependant stuff
+    if(vdf.find(u".NX.")!=std::string::npos)
+      return;
 
     if(t==Dir::FT_Dir && vdf!=u".." && vdf!=u".") {
       auto dir = root + vdf + u"/";

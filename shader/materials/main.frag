@@ -83,6 +83,10 @@ vec4 forwardShading(vec4 t) {
   alpha = (alpha-0.5)*2.0;
 #endif
 
+#if defined(LVL_OBJECT)
+  alpha *= bucket.alphaWeight;
+#endif
+
 #if defined(GHOST)
   color = ghostColor(t.rgb);
 #endif
@@ -92,7 +96,7 @@ vec4 forwardShading(vec4 t) {
 #endif
 
 #if defined(EMISSIVE)
-  color *= 2.0;
+  color *= 3.0;
 #elif defined(MAT_LINEAR_CLR)
   color *= scene.exposure;
 #else
