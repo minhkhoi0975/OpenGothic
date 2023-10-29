@@ -128,6 +128,11 @@ Marvin::Marvin() {
     {"insert %c",                  C_Insert},
 
     {"toggle gi",                  C_ToggleGI},
+
+    {"attribute cheat health",     C_HealthCheat},
+    {"attribute cheat mana",       C_ManaCheat},
+    {"attribute cheat strength",   C_StrengthCheat},
+    {"attribute cheat dexterity",  C_DexterityCheat}
     };
   }
 
@@ -358,6 +363,44 @@ bool Marvin::exec(std::string_view v) {
     case C_ToggleGI:
       Gothic::inst().toggleGi();
       return true;
+
+    case C_HealthCheat:
+    {
+		Npc* player = Gothic::inst().player();
+		if (player == nullptr)
+			return false;
+		player->changeAttribute(Attribute::ATR_HITPOINTSMAX, 999999999, false);
+		player->changeAttribute(Attribute::ATR_HITPOINTS, 999999999, false);
+		return true;
+    }
+
+    case C_ManaCheat:
+    {
+		Npc* player = Gothic::inst().player();
+		if (player == nullptr)
+			return false;
+		player->changeAttribute(Attribute::ATR_MANAMAX, 999999999, false);
+		player->changeAttribute(Attribute::ATR_MANA, 999999999, false);
+		return true;
+    }
+
+    case C_StrengthCheat:
+    {
+	    Npc* player = Gothic::inst().player();
+		if (player == nullptr)
+			return false;
+		player->changeAttribute(Attribute::ATR_STRENGTH, 999999999, false);
+		return true;
+    }
+
+	case C_DexterityCheat:
+    {
+		Npc* player = Gothic::inst().player();
+		if (player == nullptr)
+			return false;
+		player->changeAttribute(Attribute::ATR_DEXTERITY, 999999999, false);
+		return true;
+    }
     }
 
   return true;

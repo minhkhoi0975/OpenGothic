@@ -49,6 +49,11 @@ class Marvin {
 
       // opengothic specific
       C_ToggleGI,
+
+      C_HealthCheat,
+      C_ManaCheat,
+      C_StrengthCheat,
+      C_DexterityCheat
       };
 
     struct Cmd {
