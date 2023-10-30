@@ -53,7 +53,9 @@ class Marvin {
       C_HealthCheat,
       C_ManaCheat,
       C_StrengthCheat,
-      C_DexterityCheat
+      C_DexterityCheat,
+
+      C_SkillCheat
       };
 
     struct Cmd {

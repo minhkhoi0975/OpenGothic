@@ -10,6 +10,9 @@
 #include "camera.h"
 #include "gothic.h"
 
+// Makes the player learn a skill.
+static bool learnSkill(Npc* npc, std::string_view skillName);
+
 static bool startsWith(std::string_view str, std::string_view needle) {
   if(needle.size()>str.size())
     return false;
@@ -132,7 +135,8 @@ Marvin::Marvin() {
     {"attribute cheat health",     C_HealthCheat},
     {"attribute cheat mana",       C_ManaCheat},
     {"attribute cheat strength",   C_StrengthCheat},
-    {"attribute cheat dexterity",  C_DexterityCheat}
+    {"attribute cheat dexterity",  C_DexterityCheat},
+    {"skill cheat %s",             C_SkillCheat}
     };
   }
 
@@ -401,6 +405,14 @@ bool Marvin::exec(std::string_view v) {
 		player->changeAttribute(Attribute::ATR_DEXTERITY, 999999999, false);
 		return true;
     }
+
+    case C_SkillCheat:
+    {
+		Npc* player = Gothic::inst().player();
+		if (player == nullptr)
+			return false;
+        return learnSkill(player, ret.argv[0]);
+    }
     }
 
   return true;
@@ -511,3 +523,99 @@ std::string_view Marvin::completeInstanceName(std::string_view inp, bool& fullwo
     }
   return match;
   }
+
+static bool learnSkill(Npc* npc, std::string_view skillName)
+{
+	if (npc == nullptr)
+		return false;
+
+	// Weapon skills.
+	if (skillName == "1h")
+	{
+		npc->setTalentValue(Talent::TALENT_1H, 200);
+		npc->setTalentSkill(Talent::TALENT_1H, 2);
+		return true;
+	}
+	else if (skillName == "2h")
+	{
+		npc->setTalentValue(Talent::TALENT_2H, 200);
+		npc->setTalentSkill(Talent::TALENT_2H, 2);
+		return true;
+	}
+	else if (skillName == "bow")
+	{
+		npc->setTalentValue(Talent::TALENT_BOW, 200);
+		npc->setTalentSkill(Talent::TALENT_BOW, 2);
+		return true;
+	}
+	else if (skillName == "crossbow")
+	{
+		npc->setTalentValue(Talent::TALENT_CROSSBOW, 200);
+		npc->setTalentSkill(Talent::TALENT_CROSSBOW, 2);
+		return true;
+	}
+
+	// Stealth skills.
+	else if (skillName == "picklock")
+	{
+		npc->setTalentValue(Talent::TALENT_PICKLOCK, 100);
+		npc->setTalentSkill(Talent::TALENT_PICKLOCK, 1);
+		return true;
+	}
+	else if (skillName == "sneak")
+	{
+		npc->setTalentSkill(Talent::TALENT_SNEAK, 1);
+		return true;
+	}
+	else if (skillName == "acrobat")
+	{
+		npc->setTalentSkill(Talent::TALENT_ACROBAT, 1);
+		return true;
+	}
+    else if (skillName == "pickpocket")
+    {
+        npc->setTalentSkill(Talent::TALENT_PICKPOCKET, 1);
+        return true;
+    }
+
+	// Crafting skills.
+	else if (skillName == "mage")
+	{
+		npc->setTalentSkill(Talent::TALENT_MAGE, 4);
+		return true;
+	}
+    else if (skillName == "firemaster")
+    {
+		npc->setTalentSkill(Talent::TALENT_FIREMASTER, 4);
+		return true;
+    }
+	else if (skillName == "runes")
+	{
+		npc->setTalentSkill(Talent::TALENT_RUNES, 1);
+		return true;
+	}
+	else if (skillName == "alchemy")
+	{
+		npc->setTalentSkill(Talent::TALENT_ALCHEMY, 1);
+		return true;
+	}
+	else if (skillName == "smith")
+	{
+		npc->setTalentSkill(Talent::TALENT_SMITH, 1);
+		return true;
+	}
+
+	// Other skills.
+	else if (skillName == "takeanimaltrophy")
+	{
+		npc->setTalentSkill(Talent::TALENT_TAKEANIMALTROPHY, 1);
+		return true;
+	}
+	else if (skillName == "foreignlanguage")
+	{
+		npc->setTalentSkill(Talent::TALENT_FOREIGNLANGUAGE, 1);
+		return true;
+	}
+
+	return false;
+}
